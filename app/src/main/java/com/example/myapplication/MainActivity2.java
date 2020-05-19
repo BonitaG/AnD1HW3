@@ -15,44 +15,40 @@ import android.app.Activity;
 
     public class MainActivity2 extends AppCompatActivity {
 
-        private Button share_btn = findViewById(R.id.Share);
+        private Button share_btn;
         private Button calculator_btn;
         private TextView result_save;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_secondactivity);
             calculator_btn = findViewById(R.id.Сalculator);
             result_save = findViewById(R.id.result_field);
-
-            share_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (share_btn.getText().toString() != null){
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_SEND);
-                        intent.putExtra(Intent.EXTRA_TEXT,result_save.getText().toString());
-                        intent.setType("text/plain");
-                        startActivity(intent);
-                    }
-                }
-            });
-
-            calculator_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity2.this, MainActivity.class);
-                    startActivityForResult(intent, 1);
-                }
-            });
-
+            share_btn = findViewById(R.id.share);
         }
 
         @Override
         protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == 1 && resultCode == RESULT_OK && data != null);
-            result_save.setText(data.getStringExtra("result"));
+            String text = data.getStringExtra("result");
+            result_save.setText(text);
+
         }
-}
+
+        public void onClickCalc(View view) {
+            Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+            startActivityForResult(intent, 1);
+        }
+
+        public void share(View view) {
+            if (share_btn.getText().toString() != null){
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT,result_save.getText().toString());
+                intent.setType("text/plain");
+                startActivity(intent);
+            }
+        }
+    }
